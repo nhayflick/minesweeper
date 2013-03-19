@@ -88,11 +88,14 @@ class Game
   end
 
   def won?
+    #REV Hard to follow here, perhaps break into two lines or add an explanatory comment about your win condition?
     return true if @board.board_reveal.flatten.select{|bool| bool == false }.length == @board.mines
     false
   end
 
 end
+
+#REV To get the correct reveal behavior you need to step recursively through the neighbors to each revealed square that has no perimeter bombs until you reach the end of the board or a sold border of perimeter squares
 
 class Board
 
@@ -117,6 +120,8 @@ class Board
     @board_flag = []
     # just indices (ie [[1,2], [4,5]])
   end
+
+  #REV Nice job splitting up your methods
 
   def assign_bombs
     @mines.times do
@@ -148,6 +153,8 @@ class Board
     return true if @board[row][col] == :b
     false
   end
+
+  #REV If you were to refactor here you might consider trying to consolidate your boards into a single board object, perhaps by making a Space class and then assigning spaces with view_state, bombs, neighbors, etc. to each spot in the array.
 
   def print
     print_board = Array.new(@size) { Array.new(@size, '*') }
