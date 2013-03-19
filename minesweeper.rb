@@ -1,4 +1,5 @@
 require 'debugger'
+require 'JSON'
 class Game
   attr_accessor :board
   def initialize(size, mines)
@@ -18,13 +19,26 @@ class Game
       next if input.nil?
 
       make_move(input)
-
+      @time  ||= Time.now
+      @moves ||= 0
+      @moves  += 1
 
 
 
     end
     @board.print
     puts "YOU WON!!!"
+    @time = (Time.now - @time).to_i
+    puts "You completed the game in #{@time} seconds and #{@moves} moves!"
+    file = File.read('highscores.json')
+    json = JSON.parse(file) unless file.empty?
+    json ||= {}
+    json['highscores'] ||= []
+    json['highscores'] << [@time, @moves]
+    puts json
+    File.open('highscores.json', 'w') do |file|
+      file.write(json.to_json)
+    end
   end
 
   def make_move(input)
